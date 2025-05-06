@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Color Gallery</title>
+    <style>
+      * {
+        padding: 0px;
+        margin: 0px;
+        box-sizing: border-box;
+      }
+
+      .red {
+        max-width: 1500px;
+        height: 150vh;
+        background: red;
+        margin: 0px auto;
+      }
+
+      .gallery {
+        max-width: 1200px;
+        display: flex;
+        justify-content: space-between;
+        align-content: center;
+        flex-direction: row;
+        margin: 0px auto;
+      }
+
+      .right {
+        max-width: 50%;
+      }
+
+      .left {
+        height: 100vh !important;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 50%;
+      }
+
+      .cardSlide {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        position: relative;
+      }
+
+      .card-container {
+        position: absolute;
+        width: fit-content;
+        height: fit-content;
+        padding: 20px 30px 20px 0px;
+        background: #ffffff;
+        border-top-right-radius: 14px;
+        left: 0px;
+        bottom: 0px;
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-content: center;
+        justify-content: center;
+        align-items: flex-start;
+        transform: translateX(-100%);
+        opacity: 0;
+        will-change: transform, opacity;
+        transition: all 0.5s ease-out;
+      }
+
+      .desktopPhoto.active .card-container {
+        transform: translateX(0);
+        opacity: 1;
+      }
+
+      .card-large-number {
+        font-style: normal;
+        font-weight: 800;
+        font-size: 56px;
+        line-height: 68px;
+        text-transform: capitalize;
+        color: #d50c3d;
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      .desktopPhoto.active .card-large-number {
+        transform: translateY(0);
+        opacity: 1;
+        transition-delay: 0.2s;
+      }
+
+      .card-title {
+        margin: 5px 0px 20px;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 22.68px;
+        line-height: 27px;
+        text-transform: capitalize;
+        color: #232826;
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      .desktopPhoto.active .card-title {
+        transform: translateY(0);
+        opacity: 1;
+        transition-delay: 0.3s;
+      }
+
+      .card-description {
+        font-style: normal;
+        font-weight: 700;
+        font-size: 16px;
+        line-height: 20px;
+        text-transform: capitalize;
+        color: #232826;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 300px;
+        transition: transform 0.4s ease-out, opacity 0.4s ease-out;
+        transform: translateY(20px);
+        opacity: 0;
+      }
+
+      .desktopPhoto.active .card-description {
+        transform: translateY(0);
+        opacity: 1;
+        transition-delay: 0.4s;
+      }
+
+      .content-container {
+        width: fit-content;
+        height: 50%;
+        display: none;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        align-content: flex-start;
+        justify-content: space-around;
+        align-items: flex-start;
+        position: relative;
+      }
+
+      .content-heading {
+        max-width: 460px;
+        height: fit-content;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 48px;
+        line-height: 58px;
+        text-transform: uppercase;
+        color: #232826;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .content-heading h3 {
+        transform: translateY(100%);
+        opacity: 0;
+        will-change: transform, opacity;
+      }
+
+      .number-label {
+        position: absolute;
+        top: 20%;
+        left: 72%;
+        font-style: normal;
+        font-weight: 800;
+        font-size: 128px;
+        line-height: 34px;
+        display: flex;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.06);
+        transform: translateY(20px);
+        opacity: 0;
+        will-change: transform, opacity;
+      }
+
+      .content-paragraph {
+        max-width: 440px;
+        font-style: normal;
+        font-weight: 700;
+        font-size: 24px;
+        line-height: 30px;
+        color: #232826;
+        position: relative;
+        transform: translateY(20px);
+        opacity: 0;
+        will-change: transform, opacity;
+      }
+
+      .desktopPhotos {
+        height: 544px;
+        width: 630px;
+        border-radius: 20px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 4px 4px 20px rgba(0, 0, 0, 0.2);
+      }
+      .desktopPhotos img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+      .desktopPhoto {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .image1 {
+        background-image: url("");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+
+      .image2 {
+        background-image: url("");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+
+      .image3 {
+        background-image: url("");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+
+      .image4 {
+        background-image: url("");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+
+      /* small screen / mobile layout */
+      .mobileContent {
+        display: none;
+        width: 80vw;
+      }
+
+      .mobilePhoto {
+        width: 80vw;
+        height: 80vw;
+        margin-top: 5em;
+        border-radius: 6vw;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="red"></div>
+
+    <div class="gallery">
+      <div class="left">
+        <!-- desktop content -->
+        <div class="desktopPhotos">
+          <div class="desktopPhoto image1">
+            <div class="card-container">
+              <div class="card-large-number">+2 m</div>
+              <div class="card-title">Donated money</div>
+              <div class="card-description">
+                People Go to Bed Hungry Each Night Lorem ipsum
+              </div>
+            </div>
+          </div>
+          <div class="desktopPhoto image2">
+            <div class="card-container">
+              <div class="card-large-number">+2 m</div>
+              <div class="card-title">Donated money</div>
+              <div class="card-description">
+                People Go to Bed Hungry Each Night Lorem ipsum
+              </div>
+            </div>
+          </div>
+          <div class="desktopPhoto image3">
+            <div class="card-container">
+              <div class="card-large-number">+2 m</div>
+              <div class="card-title">Donated money</div>
+              <div class="card-description">
+                People Go to Bed Hungry Each Night Lorem ipsum
+              </div>
+            </div>
+          </div>
+          <div class="desktopPhoto image4">
+            <div class="card-container">
+              <div class="card-large-number">+2 m</div>
+              <div class="card-title">Donated money</div>
+              <div class="card-description">
+                People Go to Bed Hungry Each Night Lorem ipsum
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right">
+        <div backimage="img/IMG1.png" class="cardSlide">
+          <div class="content-container">
+            <div class="number-label">01</div>
+            <div class="content-heading">
+              <h3>Protection program</h3>
+            </div>
+            <div class="content-paragraph">
+              In a journey spanning nearly a decade, the sponsorship and care of
+              orphans has been at the core of ulfah Organization's work. As a
+              result of this commitment, the number of orphans benefiting from
+              sponsorship programs reached 30,203 by the year 2024.
+            </div>
+          </div>
+        </div>
+
+        <div backimage="img/IMG2.png" class="cardSlide">
+          <div class="content-container">
+            <div class="number-label">02</div>
+            <div class="content-heading">
+              <h3>Protection program</h3>
+            </div>
+            <div class="content-paragraph">
+              In a journey spanning nearly a decade, the sponsorship and care of
+              orphans has been at the core of ulfah Organization's work. As a
+              result of this commitment, the number of orphans benefiting from
+              sponsorship programs reached 30,203 by the year 2024.
+            </div>
+          </div>
+        </div>
+
+        <div backimage="img/IMG3.png" class="cardSlide">
+          <div class="content-container">
+            <div class="number-label">03</div>
+            <div class="content-heading">
+              <h3>Protection program</h3>
+            </div>
+            <div class="content-paragraph">
+              In a journey spanning nearly a decade, the sponsorship and care of
+              orphans has been at the core of ulfah Organization's work. As a
+              result of this commitment, the number of orphans benefiting from
+              sponsorship programs reached 30,203 by the year 2024.
+            </div>
+          </div>
+        </div>
+
+        <div backimage="img/IMG1.png" class="cardSlide">
+          <div class="content-container">
+            <div class="number-label">04</div>
+            <div class="content-heading">
+              <h3>Protection program</h3>
+            </div>
+            <div class="content-paragraph">
+              In a journey spanning nearly a decade, the sponsorship and care of
+              orphans has been at the core of ulfah Organization's work. As a
+              result of this commitment, the number of orphans benefiting from
+              sponsorship programs reached 30,203 by the year 2024.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="red"></div>
+
+    <!-- Load GSAP and plugins -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+
+    <script>
+      // Wait for DOM to be fully loaded
+      document.addEventListener("DOMContentLoaded", function () {
+        // Select all cardSlide elements and desktop photos
+        const cardSlides = gsap.utils.toArray(".cardSlide");
+        const photos = gsap.utils.toArray(".desktopPhoto");
+
+        // Set initial background images from backimage attributes
+        cardSlides.forEach((slide, index) => {
+          const backImage = slide.getAttribute("backimage");
+          if (backImage && photos[index]) {
+            photos[index].style.backgroundImage = `url(${backImage})`;
+          }
+        });
+
+        // Initially set all photos except first to be positioned below their container and hidden
+        gsap.set(photos.slice(1), {
+          yPercent: 100,
+          opacity: 0,
+          zIndex: 0
+        });
+
+        // Set first photo to be visible and active
+        gsap.set(photos[0], {
+          yPercent: 0,
+          opacity: 1,
+          zIndex: 1
+        });
+        photos[0].classList.add("active");
+
+        // Create a match media instance for responsive behavior
+        let mm = gsap.matchMedia();
+
+        // Desktop behavior (min-width: 600px)
+        mm.add("(min-width: 600px)", () => {
+          // Pin the left column (with photos) while scrolling through content
+          ScrollTrigger.create({
+            trigger: ".gallery",
+            start: "top top",
+            end: "bottom bottom",
+            pin: ".left"
+          });
+
+          // Create scroll triggers for each cardSlide
+          cardSlides.forEach((slide, index) => {
+            const contentContainer = slide.querySelector(".content-container");
+            const headline = slide.querySelector("h3");
+            const numberLabel = slide.querySelector(".number-label");
+            const paragraph = slide.querySelector(".content-paragraph");
+
+            // Set initial state - all text elements hidden and container not displayed
+            gsap.set([headline, numberLabel, paragraph], {
+              opacity: 0,
+              y: "50px"
+            });
+
+            // Create animation for when the cardSlide enters the viewport
+            ScrollTrigger.create({
+              trigger: slide,
+              start: "top 30%",
+              end: "top 60%",
+              onEnter: () => {
+                // First make the container visible
+                contentContainer.style.display = "flex";
+
+                // Then animate all text elements in sequence
+                gsap.to(headline, {
+                  y: 0,
+                  opacity: 1,
+                  duration: 0.8,
+                  ease: "power3.out"
+                });
+                gsap.to(numberLabel, {
+                  y: 0,
+                  opacity: 1,
+                  duration: 0.8,
+                  ease: "power3.out",
+                  delay: 0.2
+                });
+                gsap.to(paragraph, {
+                  y: 0,
+                  opacity: 1,
+                  duration: 0.8,
+                  ease: "power3.out",
+                  delay: 0.4
+                });
+              },
+              once: true // Only animate once
+            });
+          });
+
+          // Create photo animations for all slides except first
+          for (let i = 1; i < cardSlides.length; i++) {
+            const currentSlide = cardSlides[i];
+            const prevPhoto = photos[i - 1];
+            const currentPhoto = photos[i];
+
+            // Set z-index for proper stacking
+            gsap.set(currentPhoto, { zIndex: 1 });
+            gsap.set(prevPhoto, { zIndex: 0 });
+
+            ScrollTrigger.create({
+              trigger: currentSlide,
+              start: "top 30%",
+              end: "top 60%",
+              onEnter: () => {
+                // Remove active class from all photos
+                photos.forEach(photo => photo.classList.remove("active"));
+                
+                // Add active class to current photo
+                currentPhoto.classList.add("active");
+                
+                // Animate current photo in and previous photo out
+                gsap.to(currentPhoto, {
+                  yPercent: 0,
+                  opacity: 1,
+                  duration: 1,
+                  ease: "power3.out",
+                  delay: 0.1
+                });
+                gsap.to(prevPhoto, {
+                  yPercent: -100,
+                  opacity: 0,
+                  duration: 1,
+                  ease: "power3.out",
+                  delay: 0.1
+                });
+              },
+              onLeaveBack: () => {
+                // Remove active class from all photos
+                photos.forEach(photo => photo.classList.remove("active"));
+                
+                // Add active class to previous photo
+                prevPhoto.classList.add("active");
+                
+                // When scrolling back, reverse the animation
+                gsap.to(currentPhoto, {
+                  yPercent: 100,
+                  opacity: 0,
+                  duration: 1,
+                  ease: "power3.out",
+                  delay: 0.1
+                });
+                gsap.to(prevPhoto, {
+                  yPercent: 0,
+                  opacity: 1,
+                  duration: 1,
+                  ease: "power3.out",
+                  delay: 0.1
+                });
+              }
+            });
+          }
+
+          // Add animation for the first slide's photo when page loads
+          ScrollTrigger.create({
+            trigger: cardSlides[0],
+            start: "top bottom",
+            onEnter: () => {
+              photos[0].classList.add("active");
+            },
+            once: true
+          });
+
+          // Cleanup function (runs when media query no longer matches)
+          return () => {
+            // Kill all ScrollTriggers created in this context
+            ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+          };
+        });
+
+        // Refresh ScrollTrigger on resize to ensure proper calculations
+        window.addEventListener("resize", () => ScrollTrigger.refresh());
+      });
+    </script>
+  </body>
+</html>
